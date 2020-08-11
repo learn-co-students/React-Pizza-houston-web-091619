@@ -3,6 +3,7 @@ import Header from './components/Header'
 import PizzaForm from './components/PizzaForm'
 import PizzaList from './containers/PizzaList'
 const pizzaURL = 'http://localhost:3000/pizzas/'
+
 class App extends Component {
   constructor(){
     super()
@@ -31,19 +32,6 @@ class App extends Component {
   }
 
   editPizza = (pizzaID) =>{
-    console.log("editing")
-    console.log(pizzaID)
-    console.log(this.state.currentEdit)
-    // let newPizzaArr = [...this.state.displayPizza]
-    // newPizzaArr.map(pizza=>{
-    //   if(pizza.id===pizzaID){
-    //     this.setState({
-    //       topping:this.state.changedTopping,
-    //       size:this.state.changedSize,
-    //       vegetarian:this.state.changedVegan
-    //     })
-    //   }
-    // })
 
     let pizzas = this.state.displayPizza.map(pizza => {
       if(pizza.id === pizzaID){
@@ -51,12 +39,21 @@ class App extends Component {
       }
       return pizza
     })
-    
+
     this.setState({
       displayPizza: pizzas
     })
 
-    // console.log(pizzas)
+    fetch(`pizzaURL${pizzaID}`,{
+      method:'PATCH',
+      headers:{
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body:JSON.stringify({
+        pizza: this.state.currentEdit
+      })
+    })
   }
 
   handleTopping = (topping) =>{
